@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
             {
                 if (!empty($_SERVER[ 'argv' ])
                     && isset($_SERVER[ 'argv' ][ 2 ]) && isset($_SERVER[ 'argv' ][ 2 ])
-                    && !in_array($_SERVER[ 'argv' ][ 1 ], [ 'company:employee', 'employee:can' ])) {
+                    && in_array($_SERVER[ 'argv' ][ 1 ], [ 'company:employee', 'employee:can' ])) {
                     $param = $_SERVER[ 'argv' ][ 2 ];
                     if ($param == 'programmer') return new Programmer();
                     if ($param == 'tester') return new Tester();
