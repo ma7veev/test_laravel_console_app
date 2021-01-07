@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Console\Commands\CompanyEmployee;
 use App\Services\Employee\Designer;
 use App\Services\Employee\DutiesHandler;
 use App\Services\Employee\EmployeeInterface;
@@ -25,19 +24,21 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         if ($this->app->runningInConsole()) {
-            if (!empty($_SERVER[ 'argv' ]) && isset($_SERVER[ 'argv' ][ 2 ])) {
-                $param = $_SERVER[ 'argv' ][ 2 ];
-                $this->app->bind(EmployeeInterface::class, function () use ($param)
-                {
+            $this->app->bind(EmployeeInterface::class, function ()
+            {
+                if (!empty($_SERVER[ 'argv' ])
+                    && isset($_SERVER[ 'argv' ][ 2 ]) && isset($_SERVER[ 'argv' ][ 2 ])
+                    && !in_array($_SERVER[ 'argv' ][ 1 ], [ 'company:employee', 'employee:can' ])) {
+                    $param = $_SERVER[ 'argv' ][ 2 ];
                     if ($param == 'programmer') return new Programmer();
                     if ($param == 'tester') return new Tester();
                     if ($param == 'designer') return new Designer();
                     if ($param == 'manager') return new Manager();
-                    throw new RuntimeException('Invalid argument');
-                });
-            } else {
-                throw new RuntimeException('Argument is empty');
-            }
+                    throw new RuntimeException('Invalid arguments');
+                }
+
+                return new Manager();//default value when binding is not used
+            });
         }
     }
 
@@ -46,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(CompanyEmployee $employee)
+    public function boot()
     {
     }
 }

@@ -65,4 +65,16 @@ class DutiesHandler
 
         return $list;
     }
+
+    /**
+     * @param string $duty
+     * @return string
+     */
+    public function getCan(string $duty):string{
+        if ($this->can($duty)){
+            return 'true';
+        } else {
+            return 'false';
+        }
+    }
 }
